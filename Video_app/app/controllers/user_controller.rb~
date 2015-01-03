@@ -16,7 +16,7 @@ class UserController < ApplicationController
   def try_login
 	  @user = User.find_by_Name(params[:Name])
 	  if @user.present?
-		  if PasswordHash.validatePassword(params[:Password], @user.hash_pass)
+		  if PasswordHash.validatePassword(params[:Password], @user.Password)
 		  	cookies[:user] = {:value => @user.id.to_s, :expires => Time.now + 3600}
 		  	#fix pathing
 		  	redirect_to root_path and return
@@ -36,6 +36,33 @@ class UserController < ApplicationController
   end
 
   def create
+  end
+
+  def try_create
+	  if params[:Name].present? && params[:Password].present? && params[:Confirm_Password].present?
+		  if User.find_by_Name(params[:Name]).present?
+			  cookies[:error] = "That username is already taken"
+			  redirect_to create_path and return
+		  end
+		  if params[:Password].length < 6
+			  cookies[:error] = "Password needs a minimum of 6 characters"
+			  redirect_to create_path and return
+		  end
+
+		  @user 	= User.new()
+		  @user.Email 	= params[:Email]
+		  @user.Name 	= params[:Name]
+		  @user.Password= PasswordHash.createHash(params[:Password])
+		  @user.save()
+
+		  cookies[:user] = {:value => @user.id.to_s, :expires => Time.now + 3600}
+
+		  #fix pathing
+		  redirect_to root_path and return
+	  else
+		  cookies[:error] = "There was an error, please fill out the required spaces"
+		  redirect_to create_path
+	  end
   end
 
   def V_library
