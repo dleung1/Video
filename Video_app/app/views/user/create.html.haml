@@ -1,0 +1,39 @@
+.signup_container
+  .col-md-4.col-md-4
+    = form_tag(action: "try_create") do
+      %h1
+        Sign Up
+      .form-group
+        %input.form-control.email{:type=>"email", :name =>"email", :placeholder =>"Email"}
+      .form-group
+        %input.form-control.name{:type=>"username", :name =>"username", :placeholder =>"Username"}
+      .form-group
+        %input.form-control.password{:type=>"password", :name =>"password", :placeholder=>"Password"}
+      .form-group
+        %input.form-control.confirm_password{:type=>"confirm_password", :name =>"confirm_password", :placeholder =>"Confirm Password"}
+      .form-group
+        %input.form-control.btn.btn-primary{:type=>"submit", :value=>"Create!"}
+
+.login_container
+  .col-md-4.col-md-4
+    = form_tag(action: @user_login_path) do
+      - if cookies[:error].present?
+        %div.error
+          = cookies[:error]
+          - cookies[:error] = nil
+      - if @user.present?
+        %div.error
+          You're already logged in as 
+      - else
+        %h1
+          Log In
+        .form-group
+          %input.form-control.name{:type=>"Name", :name =>"Name", :placeholder =>"Username"}
+        .form-group
+          %input.form-control.password{:type=>"Password", :name =>"Password", :placeholder=>"Password"}
+      - if @user.present?
+        .form-group
+          %input.form-control.btn.btn-primary{:type=>"submit", :value=>"Log Out!"}
+      - else
+        .form-group
+          %input.form-control.btn.btn-primary{:type=>"submit", :value=>"Log In!"}
