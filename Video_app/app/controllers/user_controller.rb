@@ -5,6 +5,13 @@ class UserController < ApplicationController
   #protect_from_forgery with: :exception
 
   def show
+	  if !@user.present?
+		  cookies[:error] = "You must be logged in"
+		  redirect_to create_path and return
+	  end
+	  if @user != User.find(params[:id])
+		  redirect_to root_path and return
+	  end
   end
 
   def edit

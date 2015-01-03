@@ -28,7 +28,7 @@
       - if @user.present?
         %div.error
           You're already logged in as 
-          - @user.Name
+          = @user.Name
       - else
         %h1
           Log In
