@@ -1,0 +1,13 @@
+---
+development:
+  cloud_name: dq6d55pnn
+  api_key: 545155653114436
+  api_secret: 8mkPQR7NJ5Bj9p0hmZ1l80X9b6s 
+production:
+  cloud_name: dq6d55pnn
+  api_key: 545155653114436
+  api_secret: 8mkPQR7NJ5Bj9p0hmZ1l80X9b6s 
+test:
+  cloud_name: dq6d55pnn
+  api_key: 545155653114436
+  api_secret: 8mkPQR7NJ5Bj9p0hmZ1l80X9b6s 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   # Main controller
   # Home page
   root 'main#home'
@@ -23,6 +24,18 @@ Rails.application.routes.draw do
   # Show user
   get 'u/:id'		=>	'user#show', as: :user
 
+
+  # Video controller
+  # Create Video
+  get 'v/create'	=>	'video#create'
+  post'/v/try_create'	=>	'video#try_create'
+
+  # Search Video
+  get 'v/search'	=>	'video#search', as: 'search'
+
+  # Show Video
+  get 'v/:id'		=>	'video#show', as: 'video'
+  post'v/:id/Download'	=>	'video#Download'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

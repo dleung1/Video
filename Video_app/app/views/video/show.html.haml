@@ -1,0 +1,28 @@
+.video_container
+  %h1
+  = @cur_video.title
+  .row
+    .col-md-6.col-md-push-3
+      .video-image
+        = cl_image_tag(@cur_video.imagefilepath)
+  .row
+    Uploaded on
+    %font{:color => "0x00FFFF"}
+      = @cur_video.created_at.strftime("%b. %d %Y")
+    Author: 
+    = @video_author.Name
+  .row
+    .form-group
+      =form_tag(:action => "Download", :target => "_blank") do
+        %input.form-control.download{:type => "filename", :name => "filename", :value => @cur_video.filepath, :readonly => true}
+        %input.form-control.btn.btn-primary{:type => "submit", :value => "Download"}
+  .row
+    %p
+      = @cur_video.description
+  .row
+    .col-md-4.col-md-push-2
+      .form-group
+        %script{:src => "http://releases.flowplayer.org/js/flowplayer-3.2.13.min.js"}
+        %a{:href => @cur_video.filepath, :style => "display:block;width:425px;height:300px;", :id => "player"}
+        <script>flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf", {clip:{autoPlay: false, autoBuffering: true, start: 5}});
+        </script>

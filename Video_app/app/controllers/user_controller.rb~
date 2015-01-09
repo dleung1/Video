@@ -4,29 +4,61 @@ class UserController < ApplicationController
   include PasswordHash
   #protect_from_forgery with: :exception
 
+  #User profile page
   def show
 	  if !@user.present?
 		  cookies[:error] = "You must be logged in"
 		  redirect_to create_path and return
 	  end
-	  if @user.id != User.find(params[:id])
+	  if params[:id].nil?
+		  redirect_to root_path and return
+	  elsif @user != User.find(params[:id])
 		  redirect_to root_path and return
 	  end
   end
 
+  #User edit page
   def edit
+	  if !@user.present?
+		  cookies[:error] = "You must be logged in"
+		  redirect_to create_path and return
+	  end
+  end
+
+  def try_edit
+	  if params[:Password].present? && params[:Confirm_Password].present?
+		  if params[:Password].length < 6
+			  cookies[:error] = "Password needs a minimum of 6 characters"
+			  redirect_to u_edit_path and return
+		  end
+		  if params[:Password] != params[:Confirm_Password]
+			  cookies[:error] = "Passwords do not match"
+			  redirect_to u_edit_path and return
+		  end
+
+		  @user.Email 	= params[:Email]
+		  @user.Password= PasswordHash.createHash(params[:Password])
+		  @user.save()
+
+		  cookies[:user] = {:value => @user.id.to_s, :expires => Time.now + 3600}
+
+		  redirect_to user_path(@user.id) and return
+	  else
+		  cookies[:error] = "There was an error, please fill out the required spaces"
+		  redirect_to u_edit_path
+	  end
   end
 
   def login
   end
 
+  #Login/Signup page
   def try_login
 	  @user = User.find_by_Name(params[:Name])
 	  if @user.present?
 		  if PasswordHash.validatePassword(params[:Password], @user.Password)
 		  	cookies[:user] = {:value => @user.id.to_s, :expires => Time.now + 3600}
-		  	#fix pathing
-		  	redirect_to root_path and return
+		  	redirect_to user_path(@user.id) and return
 		  else
 			  cookies[:error] = "The username or password was incorrect."
 		  end
@@ -68,8 +100,7 @@ class UserController < ApplicationController
 
 		  cookies[:user] = {:value => @user.id.to_s, :expires => Time.now + 3600}
 
-		  #fix pathing
-		  redirect_to root_path and return
+		  redirect_to user_path(@user.id) and return
 	  else
 		  cookies[:error] = "There was an error, please fill out the required spaces"
 		  redirect_to create_path
